@@ -1,4 +1,3 @@
-
 import React, { useState, useContext } from "react";
 import { FormGroup, Label, Input } from "reactstrap";
 import fetch from "isomorphic-fetch";
@@ -39,22 +38,31 @@ function CheckoutForm() {
 
     const token = await stripe.createToken(cardElement);
     const userToken = Cookies.get("token");
-    const response = await fetch(`${API_URL}/orders`, {
-      method: "POST",
-      headers: userToken && { Authorization: `Bearer ${userToken}` },
-      body: JSON.stringify({
-        amount: Number(Math.round(appContext.cart.total + "e2") + "e-2"),
-        dishes: appContext.cart.items,
-        address: data.address,
-        city: data.city,
-        state: data.state,
-        token: token.token.id,
-      }),
+
+    const NEWDATA = JSON.stringify({
+      amount: Number(Math.round(appContext?.cart?.total + "e2") + "e-2"),
+      dishes: appContext?.cart?.items,
+      address: data?.address,
+      city: data?.city,
+      state: data?.state,
+      token: token?.token?.id,
     });
 
-    if (!response.ok) {
-      setError(response.statusText);
-      console.log("SUCCESS")
+    console.log("data we submit", NEWDATA);
+
+    try {
+      const response = await fetch(`${API_URL}/orders`, {
+        method: "POST",
+        headers: userToken && { Authorization: `Bearer ${userToken}` },
+        body: NEWDATA,
+      });
+
+      if (!response.ok) {
+        console.log("response", response);
+        setError(response.statusText);
+      }
+    } catch (err) {
+      console.log("whats the error", err);
     }
 
     // OTHER stripe methods you can use depending on app

@@ -2,7 +2,7 @@
   "connection": "default",
   "collectionName": "orders",
   "info": {
-    "name": "order",
+    "name": "orders",
     "description": ""
   },
   "options": {
