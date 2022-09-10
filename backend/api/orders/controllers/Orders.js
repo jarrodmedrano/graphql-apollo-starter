@@ -34,9 +34,6 @@ module.exports = {
     const { address, amount, dishes, token, city, state } = JSON.parse(
       ctx.request.body
     );
-    const { user } = ctx.state;
-
-    console.log('user', user);
 
     try {
       const stripeAmount = Math.floor(amount * 100);
